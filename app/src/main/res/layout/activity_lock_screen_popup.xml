@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/_10sdp"
+    tools:context=".lockscreen.LockScreenPopupActivity">
+
+    <!--        <Space-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_weight="1" />-->
+
+    <include
+        android:id="@+id/digitalClock"
+        layout="@layout/layout_digital_clock" />
+
+    <!--        <Space-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="0dp"-->
+    <!--            android:layout_weight="2" />-->
+
+    <include
+        android:id="@+id/lockscreenView"
+        layout="@layout/layout_lockscreen_widget" />
+</LinearLayout>
