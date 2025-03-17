@@ -42,7 +42,7 @@ object LockscreenManager {
         val now = Calendar.getInstance()
         alarmTime.timeInMillis = System.currentTimeMillis()
         alarmTime[Calendar.HOUR] = 11
-        alarmTime[Calendar.MINUTE] = 38
+        alarmTime[Calendar.MINUTE] = 43
         alarmTime[Calendar.SECOND] = 0
         if (now.after(alarmTime)) {
             alarmTime.add(Calendar.DATE, 1)

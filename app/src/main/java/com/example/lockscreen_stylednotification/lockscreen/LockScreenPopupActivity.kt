@@ -1,11 +1,12 @@
 package com.example.lockscreen_stylednotification.lockscreen
 
-import android.app.Activity
+import android.app.KeyguardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.lockscreen_stylednotification.MainActivity
@@ -14,6 +15,7 @@ import com.example.lockscreen_stylednotification.lockscreen.digital_clock.ClockV
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 class LockScreenPopupActivity : AppCompatActivity() {
     private val viewModel: ClockViewModel by viewModels()
     private lateinit var binding: ActivityLockScreenPopupBinding
@@ -37,16 +39,25 @@ class LockScreenPopupActivity : AppCompatActivity() {
             }
         }
 
-        binding.llRoot.setOnClickListener {
-            startMainActivity(this)
-        }
+//        binding.llRoot.setOnClickListener {
+//            startMainActivity(this)
+//        }
 
         binding.lockscreenView.ivClose.setOnClickListener {
             this.finish()
         }
 
         binding.lockscreenView.actionButton.setOnClickListener {
-            startMainActivity(this)
+            // 🛠️ Mở khóa màn hình nếu có thể
+            val keyguardManager = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
+            if (keyguardManager.isKeyguardLocked) {
+                keyguardManager.requestDismissKeyguard(this, object : KeyguardManager.KeyguardDismissCallback() {
+                    override fun onDismissSucceeded() {
+                        super.onDismissSucceeded()
+                        openMainActivity() // Sau khi mở khóa, vào MainActivity
+                    }
+                })
+            }
         }
     }
 
@@ -59,9 +70,11 @@ class LockScreenPopupActivity : AppCompatActivity() {
         }
     }
 
-    private fun startMainActivity(fromActivity: Activity) =
-        Intent(fromActivity, MainActivity::class.java).apply {
+    private fun openMainActivity() {
+        val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            fromActivity.startActivity(this)
         }
+        startActivity(intent)
+        finish()
+    }
 }
